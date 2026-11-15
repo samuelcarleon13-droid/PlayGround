@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#101c1d" />
+  <title>Dash & Deliver — City Courier</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Dash and Deliver home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 22h3l3-10h10l4 10h2M10 22a3 3 0 1 0 6 0m3 0a3 3 0 1 0 6 0M11 12l2-4h5l3 4m-7-8h5"/></svg></span>
+        <span class="brand-name">dash<span>&</span>deliver</span>
+      </a>
+      <div class="top-meta"><span class="live-dot"></span><span>METRO DISTRICT</span><span class="meta-sep">/</span><span class="shift-label">LUNCH RUSH · SHIFT 01</span></div>
+      <button class="sound-button" id="soundBtn" aria-label="Toggle sound" title="Toggle sound"><span id="soundIcon">♫</span></button>
+    </header>
+
+    <section class="game-layout" aria-label="Delivery game">
+      <aside class="left-rail">
+        <div class="section-kicker"><span class="kicker-line"></span> YOUR SHIFT</div>
+        <div class="stat-card score-card">
+          <div class="stat-label">TODAY'S EARNINGS <span class="tiny-coin">✳</span></div>
+          <div class="score-value"><span class="currency">$</span><span id="score">000</span></div>
+          <div class="score-foot"><span class="earnings-note">Keep the tips coming</span><span class="score-trend">↗</span></div>
+        </div>
+        <div class="stats-row">
+          <div class="mini-stat"><span class="mini-icon streak-icon">✦</span><span class="mini-label">STREAK</span><strong id="streak">0<span class="unit">×</span></strong></div>
+          <div class="mini-stat"><span class="mini-icon bolt-icon">ϟ</span><span class="mini-label">BOOST</span><strong id="boostText">100<span class="unit">%</span></strong></div>
+        </div>
+        <div class="order-panel">
+          <div class="panel-heading"><div><div class="section-kicker small-kicker">ON THE CLOCK</div><h2>Next delivery</h2></div><div class="order-number" id="orderNum">01<span>/04</span></div></div>
+          <div class="timer-wrap"><div class="timer-icon">◷</div><div class="timer-info"><div class="timer-label">TIME LEFT</div><div class="timer-value" id="timer">00:35</div></div><div class="timer-ring" id="timerRing"><svg viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-progress" cx="22" cy="22" r="18"/></svg><span>!</span></div></div>
+          <div class="order-divider"></div>
+          <div class="customer-row"><div class="avatar" id="customerAvatar">M</div><div class="customer-info"><span class="customer-eyebrow" id="orderAction">PICK UP FROM</span><strong id="customerName">Corner Deli</strong></div></div>
+          <div class="address-row"><span class="pin-icon">⌖</span><div><span class="address-label">DESTINATION</span><strong id="address">Loading route…</strong></div></div>
+          <div class="package-row"><span class="package-icon">▣</span><span id="package">1 × Market bag</span><span class="tip-pill" id="tip">+$12 tip</span></div>
+          <div class="order-status" id="orderStatus"><span class="status-pulse"></span><span>HEAD TO THE PICKUP</span></div>
+        </div>
+        <div class="tip-box"><span class="tip-spark">✦</span><div><strong>Pro tip</strong><p>Cut through the parks.<br>Just watch for traffic!</p></div></div>
+      </aside>
+
+      <div class="map-column">
+        <div class="map-toolbar"><div class="map-title"><span class="map-live"></span><span>LIVE ROUTE</span><span class="toolbar-divider"></span><span class="map-street" id="streetName">OLIVE STREET</span></div><div class="map-actions"><span class="day-weather"><span>☀</span> 72°</span><button class="icon-button" id="mapZoom" aria-label="Toggle map view" title="Center map">⌖</button><button class="icon-button" id="pauseBtn" aria-label="Pause game" title="Pause">Ⅱ</button></div></div>
+        <div class="canvas-frame" id="frame">
+          <canvas id="gameCanvas" aria-label="Top-down city map. Use the arrow keys, WASD, or touch controls to ride your scooter." tabindex="0"></canvas>
+          <div class="map-coordinate" id="coords">40°43' N&nbsp; 73°59' W</div>
+          <div class="map-legend"><span><i class="legend-player"></i> YOU</span><span><i class="legend-target"></i> DELIVERY</span></div>
+          <div class="arrival-banner" id="arrivalBanner"><span>✦</span><div><strong>DELIVERED!</strong><small>Nice riding</small></div></div>
+          <div class="toast" id="toast"></div>
+          <div class="touch-controls" id="touchControls" aria-label="Touch movement controls"><button class="touch-key touch-up" data-dir="up" aria-label="Move up">▲</button><button class="touch-key touch-left" data-dir="left" aria-label="Move left">◀</button><button class="touch-key touch-down" data-dir="down" aria-label="Move down">▼</button><button class="touch-key touch-right" data-dir="right" aria-label="Move right">▶</button><button class="boost-touch" id="touchBoost">ϟ<small>BOOST</small></button></div>
+          <div class="start-overlay" id="startOverlay"><div class="start-card"><div class="start-badge">✦ &nbsp; A LITTLE ADVENTURE</div><div class="start-scooter">🛵</div><h1>Good things<br>are <em>on the way.</em></h1><p>Four deliveries. One busy little city.<br>Get every order there before the clock runs out.</p><div class="start-instructions"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><i>RIDE</i></span><span><kbd>SPACE</kbd><i>BOOST</i></span></div><button class="start-button" id="startBtn">START YOUR SHIFT <span>→</span></button><div class="start-foot">NO PRESSURE. JUST A FEW VERY HUNGRY PEOPLE.</div></div></div>
+          <div class="pause-overlay hidden" id="pauseOverlay"><div class="pause-card"><span class="pause-mark">Ⅱ</span><h2>Take a breather.</h2><p>Your deliveries will wait.</p><button id="resumeBtn" class="start-button">BACK TO THE ROAD <span>→</span></button></div></div>
+        </div>
+        <div class="map-footer"><div class="footer-location"><span class="location-pulse"></span><span id="locationText">SOMEWHERE IN THE CITY</span><span class="footer-dot">·</span><span>NEW YORK, NY</span></div><div class="controls-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>MOVE</span><span class="hint-divider">·</span><kbd>SPACE</kbd><span>BOOST</span></div></div>
+      </div>
+
+      <aside class="right-rail">
+        <div class="section-kicker"><span class="kicker-line"></span> YOUR NEIGHBORHOOD</div>
+        <div class="neighborhood-card"><div class="district-tag"><span></span> YOU'RE IN</div><h2 id="districtName">THE<br><em>GREENWICH</em><br>VILLAGE</h2><div class="district-detail"><span>✳</span><span>Good things grow here.</span></div><div class="district-art"><div class="art-sun"></div><div class="art-building bldg-a"></div><div class="art-building bldg-b"></div><div class="art-building bldg-c"></div><div class="art-tree art-tree-a"></div><div class="art-tree art-tree-b"></div><div class="art-road"></div><div class="art-bike">🛵</div></div></div>
+        <div class="route-card"><div class="route-head"><div><div class="section-kicker small-kicker">THE BIG PICTURE</div><h3>Your route</h3></div><span class="route-total" id="routeTotal">0/4</span></div><div class="route-progress"><div id="routeProgress"></div></div><div class="route-steps" id="routeSteps"><div class="route-step active"><span class="step-dot"></span><div><strong>Clock in</strong><small>Ready when you are</small></div><span class="step-state">NOW</span></div><div class="route-step"><span class="step-dot"></span><div><strong>Deliver the goods</strong><small>4 stops to make</small></div></div><div class="route-step"><span class="step-dot"></span><div><strong>Clock out</strong><small>Bring home the tips</small></div></div></div></div>
+        <div class="quote-card"><span class="quote-mark">“</span><p>Not all heroes<br>wear capes. Some<br>ride little scooters.</p><span class="quote-credit">— EVERYONE, PROBABLY</span></div>
+      </aside>
+    </section>
+    <footer class="bottom-bar"><span>MADE WITH <i>♥</i> FOR THE LONG WAY HOME</span><span>DASH & DELIVER <b>·</b> EST. TODAY</span></footer>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>

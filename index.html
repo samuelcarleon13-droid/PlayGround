@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#070a0b" />
+<title>ACERO ROJO — Operación Última Línea</title>
+<link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="loading"><div class="load-mark"></div><div>DESPLEGANDO UNIDADES…</div></div>
+
+<div id="hud" class="hidden">
+  <div id="vignette"></div>
+  <div id="damage-flash"></div>
+
+  <div id="top-left">
+    <div class="eyebrow">SECTOR <span id="level-num">01</span><span class="dim"> / 07</span></div>
+    <div id="mission-name">BASE AURORA</div>
+    <div id="objective-row"><span id="objective-text">ELIMINA A LOS ENEMIGOS</span><b id="objective-count">0 / 8</b></div>
+    <div class="mini-bar"><i id="objective-fill"></i></div>
+    <div id="status-row"><span id="enemy-alive">HOSTILES: 0</span><span id="combo-text"></span></div>
+  </div>
+
+  <div id="top-right">
+    <div id="radar-wrap">
+      <canvas id="radar" width="220" height="220"></canvas>
+      <div class="radar-ring"></div>
+      <span class="radar-n">N</span>
+    </div>
+    <div id="score">PUNTOS <b id="score-val">0</b></div>
+  </div>
+
+  <div id="crosshair"><i class="ch t"></i><i class="ch b"></i><i class="ch l"></i><i class="ch r"></i><span class="ch-dot"></span></div>
+  <div id="hitmarker"><span></span><span></span><span></span><span></span></div>
+
+  <div id="feed"></div>
+
+  <div id="banner" class="hidden">
+    <div class="banner-kicker" id="banner-kicker">SECTOR 01</div>
+    <h2 id="banner-title">BASE AURORA</h2>
+    <p id="banner-sub">ELIMINA A TODOS LOS HOSTILES</p>
+  </div>
+
+  <div id="toast" class="hidden"></div>
+
+  <div id="health-panel">
+    <div class="hp-head"><span>INTEGRIDAD</span><b id="health-num">100</b></div>
+    <div id="health-bar"><i id="health-fill"></i></div>
+    <div id="health-sub"><span id="hp-state">ESTABLE</span><span id="level-timer">00:00</span></div>
+  </div>
+
+  <div id="weapon-panel">
+    <div id="weapon-slots"></div>
+    <div id="weapon-main">
+      <div id="weapon-name">M9 VETERANO</div>
+      <div class="ammo"><b id="ammo-mag">12</b><span id="ammo-reserve">/ 96</span></div>
+    </div>
+    <div id="reload-hint" class="hidden">RECARGANDO<span id="reload-bar-wrap"><i id="reload-bar"></i></span></div>
+  </div>
+
+  <div id="scope" class="hidden">
+    <div class="scope-vignette"></div>
+    <div class="scope-lines"><i></i><i></i><i></i><i></i></div>
+    <div class="scope-ring"></div>
+    <div class="scope-dot"></div>
+    <div class="scope-label">M24 HALCÓN · 8.0×</div>
+  </div>
+
+  <div id="controls-hint">WASD MOVER · SHIFT CORRER · R RECARGAR · 1-4 ARMAS · CLIC DISPARAR</div>
+
+  <div id="touch" class="hidden">
+    <div id="look-zone"></div>
+    <div id="stick"><div id="stick-knob"></div></div>
+    <div id="touch-buttons">
+      <button id="btn-fire" class="tbtn fire" aria-label="Disparar"><span>FUEGO</span></button>
+      <button id="btn-aim" class="tbtn small" aria-label="Mira">MIRA</button>
+      <button id="btn-reload" class="tbtn small" aria-label="Recargar">REC</button>
+      <button id="btn-swap" class="tbtn small" aria-label="Cambiar arma">ARMA</button>
+      <button id="btn-jump" class="tbtn small" aria-label="Saltar">SALTO</button>
+    </div>
+  </div>
+</div>
+
+<div id="menu" class="overlay">
+  <div class="menu-shade"></div>
+  <div class="menu-inner">
+    <div class="brand">
+      <div class="brand-tag"><span class="dot"></span> OPERACIÓN ÚLTIMA LÍNEA · 2049</div>
+      <h1>ACERO<span>ROJO</span></h1>
+      <p class="brand-sub">Siete sectores. Cuatro armas. Una sola salida.</p>
+    </div>
+
+    <div class="menu-grid">
+      <section class="menu-card">
+        <header><span>01</span> BRIEFING</header>
+        <p class="brief">El frente colapsó. Eres el último operador de la Fuerza Acero. Limpia los siete sectores, recupera armamento en el camino y llega al Núcleo.</p>
+
+        <div class="section-label">SELECCIÓN DE SECTOR</div>
+        <div id="level-chips"></div>
+
+        <div class="menu-actions">
+          <button id="btn-start" class="btn primary" aria-label="Start">INICIAR MISIÓN</button>
+          <button id="btn-continue" class="btn ghost">CONTINUAR</button>
+        </div>
+        <div class="save-line" id="save-line">SIN PROGRESO GUARDADO</div>
+      </section>
+
+      <section class="menu-card">
+        <header><span>02</span> ARSENAL</header>
+        <div id="menu-weapons"></div>
+        <div class="section-label">CONTROLES</div>
+        <div class="key-grid">
+          <div><kbd>WASD</kbd><span>Mover</span></div>
+          <div><kbd>RATÓN</kbd><span>Apuntar</span></div>
+          <div><kbd>CLIC</kbd><span>Disparar</span></div>
+          <div><kbd>DER.</kbd><span>Mira / zoom</span></div>
+          <div><kbd>R</kbd><span>Recargar</span></div>
+          <div><kbd>1–4</kbd><span>Armas</span></div>
+          <div><kbd>SHIFT</kbd><span>Correr</span></div>
+          <div><kbd>ESPACIO</kbd><span>Saltar</span></div>
+        </div>
+        <div class="mobile-note">En móvil: joystick izquierdo para moverte, arrastra la derecha para apuntar y usa los botones de acción.</div>
+      </section>
+    </div>
+
+    <footer class="menu-foot">
+      <span>ACERO ROJO · BUILD 1.0</span>
+      <button id="btn-audio-menu" class="icon-btn" aria-label="Sonido">SONIDO: ON</button>
+    </footer>
+  </div>
+</div>
+
+<div id="pause" class="overlay hidden">
+  <div class="dialog">
+    <div class="dialog-kicker">PAUSA TÁCTICA</div>
+    <h2>OPERACIÓN EN ESPERA</h2>
+    <div class="dialog-stats">
+      <div><span>SECTOR</span><b id="pause-level">01</b></div>
+      <div><span>BAJAS</span><b id="pause-kills">0</b></div>
+      <div><span>PUNTOS</span><b id="pause-score">0</b></div>
+    </div>
+    <label class="slider-row">SENSIBILIDAD <input id="sens-range" type="range" min="0.4" max="2.4" step="0.1" value="1" /><b id="sens-val">1.0</b></label>
+    <div class="dialog-actions">
+      <button id="btn-resume" class="btn primary">REANUDAR</button>
+      <button id="btn-restart" class="btn ghost">REINICIAR SECTOR</button>
+      <button id="btn-menu" class="btn ghost">ABANDONAR</button>
+    </div>
+  </div>
+</div>
+
+<div id="complete" class="overlay hidden">
+  <div class="dialog">
+    <div class="dialog-kicker success">SECTOR DESPEJADO</div>
+    <h2 id="complete-title">BASE AURORA</h2>
+    <div class="dialog-stats">
+      <div><span>BAJAS</span><b id="stat-kills">0</b></div>
+      <div><span>PRECISIÓN</span><b id="stat-acc">0%</b></div>
+      <div><span>TIEMPO</span><b id="stat-time">00:00</b></div>
+      <div><span>PUNTOS</span><b id="stat-score">0</b></div>
+    </div>
+    <div id="complete-reward" class="reward">BONO DE SECTOR +500</div>
+    <div class="dialog-actions">
+      <button id="btn-next" class="btn primary">SIGUIENTE SECTOR</button>
+      <button id="btn-menu-complete" class="btn ghost">MENÚ</button>
+    </div>
+  </div>
+</div>
+
+<div id="gameover" class="overlay hidden">
+  <div class="dialog danger">
+    <div class="dialog-kicker">SEÑAL PERDIDA</div>
+    <h2>OPERADOR CAÍDO</h2>
+    <p class="dialog-copy" id="gameover-copy">El sector sigue bajo control enemigo.</p>
+    <div class="dialog-actions">
+      <button id="btn-retry" class="btn primary">REINTENTAR SECTOR</button>
+      <button id="btn-menu-dead" class="btn ghost">MENÚ</button>
+    </div>
+  </div>
+</div>
+
+<div id="victory" class="overlay hidden">
+  <div class="dialog victory">
+    <div class="dialog-kicker success">OPERACIÓN COMPLETA</div>
+    <h2>ÚLTIMA LÍNEA ASEGURADA</h2>
+    <p class="dialog-copy">Los siete sectores están despejados. La Fuerza Acero resiste.</p>
+    <div class="dialog-stats">
+      <div><span>BAJAS TOTALES</span><b id="victory-kills">0</b></div>
+      <div><span>PUNTUACIÓN</span><b id="victory-score">0</b></div>
+      <div><span>PRECISIÓN</span><b id="victory-acc">0%</b></div>
+    </div>
+    <div class="dialog-actions">
+      <button id="btn-menu-victory" class="btn primary">VOLVER AL CUARTEL</button>
+    </div>
+  </div>
+</div>
+
+<div id="rotate-hint" class="hidden">Gira tu dispositivo para una mejor experiencia</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+  />
+  <meta name="theme-color" content="#12100c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Última Línea — Operación Código Rojo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game" aria-label="Campo de batalla"></canvas>
+
+    <!-- HUD -->
+    <div id="hud" aria-live="polite">
+      <div class="hud-top">
+        <div class="hud-left">
+          <div class="health-row">
+            <span class="hud-label">VIDA</span>
+            <span id="healthValue" class="health-value">100</span>
+          </div>
+          <div class="health-bar">
+            <div id="healthFill" class="health-fill"></div>
+            <div class="health-notch"></div>
+          </div>
+          <div class="sub-stats">
+            <span id="killsValue">0</span> BAJAS
+            <span class="dot">•</span>
+            <span id="timerValue">00:00</span>
+          </div>
+        </div>
+
+        <div class="hud-center">
+          <div id="sectorLabel" class="sector-label">SECTOR 1 / 3</div>
+          <div id="objectiveText" class="objective-text">Avanza y limpia la zona</div>
+          <div class="progress-track">
+            <div id="progressFill" class="progress-fill"></div>
+            <div id="progressIcon" class="progress-icon">◈</div>
+          </div>
+        </div>
+
+        <div class="hud-right">
+          <button id="muteBtn" class="icon-btn" aria-label="Silenciar sonido" title="Sonido">♪</button>
+          <button id="pauseBtn" class="icon-btn" aria-label="Pausa" title="Pausa">❚❚</button>
+        </div>
+      </div>
+
+      <div id="bossWrap" class="boss-wrap hidden">
+        <div class="boss-name"><span id="bossName">EL CORONEL VARGA</span><span class="boss-skull">☠</span></div>
+        <div class="boss-track"><div id="bossFill" class="boss-fill"></div></div>
+      </div>
+
+      <div id="ammoPill" class="ammo-pill">
+        <span id="weaponName" class="weapon-name">FUSIL</span>
+        <span class="ammo-numbers"><b id="magValue">30</b><i>/</i><span id="reserveValue">120</span></span>
+      </div>
+
+      <div id="toast" class="toast"></div>
+      <div id="announce" class="announce"></div>
+      <div id="damageFlash" class="damage-flash"></div>
+      <div id="lowHealth" class="low-health"></div>
+    </div>
+
+    <!-- Start / pause / end overlay -->
+    <div id="overlay" class="overlay">
+      <div class="overlay-inner">
+        <div class="eyebrow">OPERACIÓN CÓDIGO ROJO</div>
+        <h1 class="game-title">ÚLTIMA<br /><span>LÍNEA</span></h1>
+        <p class="tagline">El país tiene 12 horas. Tú tienes un cuchillo y un fusil.</p>
+
+        <div id="missionCard" class="mission-card">
+          <p>
+            El coronel Varga ha robado el núcleo de una bomba y planea venderlo.
+            Infíltrate en su base, abre paso entre sus hombres y recupera el paquete.
+            <strong>Es la única forma de salvar el país.</strong>
+          </p>
+        </div>
+
+        <div id="statsCard" class="stats-card hidden"></div>
+
+        <button id="primaryBtn" class="primary-btn" aria-label="Start Game">INICIAR MISIÓN</button>
+        <button id="secondaryBtn" class="secondary-btn hidden">Reiniciar</button>
+
+        <div class="controls-hint">
+          <div class="hint-block">
+            <span class="hint-title">MÓVIL</span>
+            <span>Joystick izquierdo: moverte</span>
+            <span>Joystick derecho: apuntar y disparar</span>
+            <span>Botones: cuchillo y recarga</span>
+          </div>
+          <div class="hint-block">
+            <span class="hint-title">TECLADO</span>
+            <span>WASD mover · Ratón apuntar/disparar</span>
+            <span>Espacio cuchillo · R recargar · P pausa</span>
+          </div>
+        </div>
+
+        <p class="footnote">Toca o haz clic para activar el sonido · Sin descargas</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
